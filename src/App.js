@@ -1,22 +1,53 @@
-import logo from './logo.svg';
 import './App.css';
+import Title from './components/Title';
+import React, { useState } from 'react'
 
-function App() {
+function App(props) {
+
+
+  const [searchServ, setSearchServ] = useState([
+    {
+      title: "Oil Change",
+      cost: "$49.99",
+    },
+    {
+      title: "Brake Rotation",
+      cost: "$150.00",
+    }
+  ]);
+  const [searchTerm, setSearchTerm] = React.useState("");
+  const [searchResults, setSearchResults] = React.useState([]);
+  const handleChange = e => {
+    setSearchTerm(e.target.value);
+  };
+  React.useEffect(() => {
+    const results = searchServ.filter(service =>
+      service.title.toString().toLowerCase().includes(searchTerm)
+    );
+    setSearchResults(results);
+  }, [searchTerm]);
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <Title
+          title="My Auto Shop"
+          subHeading="This is my shop"
+        />
+        <input
+          type="text"
+          placeholder="Search"
+          value={searchTerm}
+          onChange={handleChange}
+        />
+        <ul>
+          {searchResults.map((val, key) => {
+            return (
+              <div className="user" key={key}>
+                <p>{val.title}, {val.cost}</p>
+              </div>
+            );
+          })}
+        </ul>
       </header>
     </div>
   );
